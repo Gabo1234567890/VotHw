@@ -1,0 +1,27 @@
+version: "3"
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=exampledb
+      - POSTGRES_USER=exampleuser
+      - POSTGRES_PASSWORD=examplepass
+    volumes:
+      - ./app:/app
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: exampledb
+      POSTGRES_USER: exampleuser
+      POSTGRES_PASSWORD: examplepass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
