@@ -1,7 +1,7 @@
 # Главният Flask app file, който се грижи за HTTP заявки и отговори. Той дефинира структурата и държанието на web app.
-# В този случай се дефинира простичък Flask app, който се свързва с PostgreSQL DB и взима съобщение, което след това бива върнато като JSON response
+# В този случай се дефинира простичък Flask app, който се свързва с PostgreSQL DB и взима съобщение, което се връща като HTML response
 
-from flask import Flask, jsonify
+from flask import Flask
 import psycopg2
 from psycopg2.extras import RealDictCursor # Toва е dictionary cursor - това прави резултатите от заявките (query) към БД като dict, а не като tuple
 
@@ -25,7 +25,7 @@ def index(): # Тази функция обработва заявки към ro
     message = cursor.fetchone() # Взима единствено и само първия ред от резултата от заявката и го съхранява в message променливата. Тук тя е dictionary заради RealDictCursor
     cursor.close() # Затваря курсора, за да освободи ресурси
     conn.close() # Затваря връзката с БД, за да освбоди ресурси
-    return jsonify(message=message['message']) # Извлича message ключа от dictionary-то message и го връща в JSON формат, където ключа е message
+    return f"<h1>{message['message']}</h1>" # Извлича message ключа от dictionary-то message и го връща в HTML формат, като текст
 
 if __name__ == '__main__': # Подсигурява, че Flask server-a се изпълнява само ако този файл е изпълнен, а не ако е import-нат като модул
     app.run(host='0.0.0.0', port=5000) # Стартира Flask web server-a на 0.0.0.0, за да може да се достъпи и извън контейнера и на порт 5000
