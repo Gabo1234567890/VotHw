@@ -1,14 +1,16 @@
-# Use an official Python image
+# Този файл дефинира image-a и средата на Flask web app контейнера
+
+# Дефинира, че Docker контейнера чрез python:3.9-slim image-a
 FROM python:3.9-slim
 
-# Set the working directory
+# Задава /app като работната директория за всички следващи команди в Dockerfile
 WORKDIR /app
 
-# Copy application files
+# Копира съдържанието от локалната app/ директория в /app директорията в контейнера
 COPY app/ /app
 
-# Install Python dependencies
+# Инсталира необходимите Python dependencies в контейнера
 RUN pip install -r requirements.txt
 
-# Command to start the app
+# Задава командата по подразбиране, която ще се изпълни когато контейнера бъде стартиран. В случая ще се изпълни python еxecutable-a с аргумент app.py
 CMD ["python", "app.py"]
