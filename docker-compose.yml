@@ -1,27 +1,29 @@
-version: "3"
+# Този файл дефнира и конфигурира Docker среда с повече от един контейнер, в този случай файлът дефинира как web service-a и db servic-a ще си взаимодействат в тази среда
+
+version: "3" # Дефинира версията на синтаксиса на Docker Compose файла, който се използва
 services:
-  web:
-    build: .
+  web: # Дефинира web service-a (Flask app-a) и нужната му конфигурация, за да работи в Docker контейнер
+    build: . # Показва, че този service ще използва Dockerfile-a в тази директория за да бъде построен
     ports:
-      - "5000:5000"
+      - "5000:5000" # Това свързва порт 5000 на този компютър с порт 5000 на контейнера, в който Flask app-a се изпълнява
     depends_on:
-      - db
-    environment:
+      - db # Това показва, че db контейнера трябва да бъде стартиран преди web контейнера
+    environment: # Тук са environment променливите на web контейнера и те показват как Flask app-a се свързва с PostgreSQL БД. Тези променливи се използват в app.py
       - POSTGRES_HOST=db
       - POSTGRES_DB=exampledb
       - POSTGRES_USER=exampleuser
       - POSTGRES_PASSWORD=examplepass
-    volumes:
+    volumes: # Задава, че каквито промени са направени в локалната ./app директория, моментално ще се отразят в /app директорията в контейнера
       - ./app:/app
 
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: exampledb
-      POSTGRES_USER: exampleuser
-      POSTGRES_PASSWORD: examplepass
+  db: # Дефинира db service-a (PostgreSQL контейнера), който стартира PostgreSQL DB server
+    image: postgres:13 # Това показва на Docker, че трябва да използва PostgreSQL 13 image-a и да създаде контейнер, базиран на този image
+    environment: # Това са environment променливи подадени на контейнера, за да конфигурира самата БД като бъде стартиран
+      POSTGRES_DB: exampledb # Това създава базата данни с посоченото име
+      POSTGRES_USER: exampleuser # Това задава PostgreSQL потребителя към даденото
+      POSTGRES_PASSWORD: examplepass # Това задава паролата на потребителя към това
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data # Това създава volume наречен postgres_data, който съхранява данните от зададената директория (в която по подразбиране PostgreSQL съхранява данните си в контейнер) локално, като по този начин дори и контейнера да бъде спрян или премахнат информацията не се губи когато той бъде стартиран отново
 
-volumes:
+volumes: # Тук именно се казва на Docker, че трябва да използва postgres_data volume-a, за да е постоянна информацията
   postgres_data:

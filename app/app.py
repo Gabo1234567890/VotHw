@@ -9,7 +9,7 @@ app = Flask(__name__) # Създава се инстанция на Flask app
 
 def get_db_connection(): # Taзи функция установява връзка с БД
     conn = psycopg2.connect(
-        host="db",  # Специфицира host-а за връзката с ДБ. В случая това съвпада с посоченото в docker-compose.yml
+        host="db",  # Специфицира host-а за връзката с БД. В случая това съвпада с посоченото в docker-compose.yml
         database="exampledb", # Специфицира името на БД, с която да се свърже
         user="exampleuser", # Задава потребителското име за аутентикация в БД
         password="examplepass", # Задава паролата за аутентикация в БД
